@@ -14,6 +14,7 @@ object Apifactory {
             .newBuilder()
             .addQueryParameter("api_key", comicvineApiKey)
             .addQueryParameter("format", "json")
+            .addQueryParameter("limit", "10")
             .build()
 
         val newRequest = chain.request()

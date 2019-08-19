@@ -3,6 +3,7 @@ package com.example.comicsearch
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 // Data Model for TMDB Movie item
 data class ComicVineMovie(
@@ -13,6 +14,7 @@ data class ComicVineMovie(
 )
 
 class ImageUrl(
+    var thumb_url: String,
     var medium_url: String
 )
 
@@ -25,7 +27,7 @@ data class ComicVineMovieResponse(
 //A retrofit Network Interface for the Api
 interface IComicVineApi {
     @GET("search")
-    fun search(): Deferred<Response<ComicVineMovieResponse>>
+    fun search(@Query("query") query: String): Deferred<Response<ComicVineMovieResponse>>
 
     @GET("movies")
     fun movies(): Deferred<Response<ComicVineMovieResponse>>

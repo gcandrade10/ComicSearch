@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Comic Search</string>
+    <string name="search_title">Search</string>
 </resources>

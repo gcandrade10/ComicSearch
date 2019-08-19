@@ -1,6 +1,8 @@
 package com.example.comicsearch
 
 import android.os.Bundle
+import android.view.Menu
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -30,5 +32,28 @@ class MovieActivity : AppCompatActivity() {
                 adapter = ListAdapter(movies)
             }
         })
+
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        val searchView = menu.findItem(R.id.searchView).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchView.clearFocus()
+                return true // Don't close
+            }
+
+            override fun onQueryTextChange(query: String): Boolean {
+                // This will ALWAYS work, because an empty query is a select all query
+//                val cursor = helper.search(query)
+//                mCursorAdapter.swapCursor(cursor)
+                comicVineViewModel.search(query)
+                return false
+            }
+        })
+        return true
+    }
+
+
 }

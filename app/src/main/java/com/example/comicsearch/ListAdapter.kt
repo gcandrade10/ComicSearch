@@ -38,7 +38,7 @@ class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
     fun bind(movie: ComicVineMovie) {
         mTitleView?.text = movie.name
-        Picasso.get().load(movie.image.medium_url).into(mImageView);
+        Picasso.get().load(movie.image.thumb_url).into(mImageView);
 
     }
 

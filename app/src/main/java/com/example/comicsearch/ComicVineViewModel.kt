@@ -29,5 +29,15 @@ class ComicVineViewModel : ViewModel() {
 
 
     fun cancelAllRequests() = coroutineContext.cancel()
+    fun search(query: String) {
+        if (query.isEmpty()) {
+            fetchMovies()
+        } else {
+            scope.launch {
+                val search = repository.search(query)
+                popularMoviesLiveData.postValue(search)
+            }
+        }
+    }
 
 }
