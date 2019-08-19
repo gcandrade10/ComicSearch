@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_movie.*
 
 class MovieActivity : AppCompatActivity() {
 
@@ -18,11 +20,15 @@ class MovieActivity : AppCompatActivity() {
 
         comicVineViewModel.fetchMovies()
 
-        comicVineViewModel.popularMoviesLiveData.observe(this, Observer {
-            Toast.makeText(this, it.size, Toast.LENGTH_LONG)
-            //TODO - Your Update UI Logic
+        comicVineViewModel.popularMoviesLiveData.observe(this, Observer { movies ->
+            Toast.makeText(this, "Llegaron: ${movies.size}", Toast.LENGTH_LONG)
+            list_recycler_view.apply {
+                // set a LinearLayoutManager to handle Android
+                // RecyclerView behavior
+                layoutManager = LinearLayoutManager(context)
+                // set the custom adapter to the RecyclerView
+                adapter = ListAdapter(movies)
+            }
         })
-
     }
-
 }
