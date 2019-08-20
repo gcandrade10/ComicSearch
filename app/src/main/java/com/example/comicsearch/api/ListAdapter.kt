@@ -1,14 +1,18 @@
-package com.example.comicsearch
+package com.example.comicsearch.api
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.comicsearch.R
 import com.squareup.picasso.Picasso
 
 
-class ListAdapter(private val list: List<ComicVineMovie>) : RecyclerView.Adapter<MovieViewHolder>() {
+class ListAdapter(
+    private val list: List<Movie>, private val onClickListener: (View, Movie) -> Unit
+) : RecyclerView.Adapter<MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -16,8 +20,11 @@ class ListAdapter(private val list: List<ComicVineMovie>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie: ComicVineMovie = list[position]
+        val movie: Movie = list[position]
         holder.bind(movie)
+        holder.itemView.setOnClickListener { view ->
+            onClickListener.invoke(view, movie)
+        }
     }
 
     override fun getItemCount(): Int = list.size
@@ -36,9 +43,9 @@ class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
     }
 
-    fun bind(movie: ComicVineMovie) {
+    fun bind(movie: Movie) {
         mTitleView?.text = movie.name
-        Picasso.get().load(movie.image.thumb_url).into(mImageView);
+        Picasso.get().load(movie.image.thumb_url).into(mImageView)
 
     }
 

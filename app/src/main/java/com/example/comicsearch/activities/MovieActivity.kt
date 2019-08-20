@@ -1,38 +1,46 @@
-package com.example.comicsearch
+package com.example.comicsearch.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.comicsearch.viewmodels.ComicVineViewModel
+import com.example.comicsearch.api.ListAdapter
+import com.example.comicsearch.api.Movie
+import com.example.comicsearch.R
 import kotlinx.android.synthetic.main.activity_movie.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieActivity : AppCompatActivity() {
 
-    private lateinit var comicVineViewModel: ComicVineViewModel
+    val comicVineViewModel: ComicVineViewModel by viewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-
-        comicVineViewModel = ViewModelProviders.of(this).get(ComicVineViewModel::class.java)
 
         comicVineViewModel.fetchMovies()
 
         comicVineViewModel.popularMoviesLiveData.observe(this, Observer { movies ->
             Toast.makeText(this, "Llegaron: ${movies.size}", Toast.LENGTH_LONG)
             list_recycler_view.apply {
-                // set a LinearLayoutManager to handle Android
-                // RecyclerView behavior
                 layoutManager = LinearLayoutManager(context)
-                // set the custom adapter to the RecyclerView
-                adapter = ListAdapter(movies)
+                adapter = ListAdapter(movies, openActivity)
             }
         })
 
+    }
+
+    private val openActivity = { view: View, movie: Movie ->
+        val intent = Intent(this, MovieDetailActivity::class.java)
+        intent.putExtra("id", movie.id)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,15 +53,10 @@ class MovieActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                // This will ALWAYS work, because an empty query is a select all query
-//                val cursor = helper.search(query)
-//                mCursorAdapter.swapCursor(cursor)
                 comicVineViewModel.search(query)
                 return false
             }
         })
         return true
     }
-
-
 }
