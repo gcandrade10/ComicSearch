@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.comicsearch.R
 import com.example.comicsearch.viewmodels.MoviewDetailViewModel
 import com.example.comicsearch.databinding.ActivityMovieDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
+import android.view.MenuItem
+import com.example.comicsearch.R
+
 
 class MovieDetailActivity : AppCompatActivity() {
 
@@ -25,5 +27,15 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.movie = movie
         })
         moviewDetailViewModel.fetchMovie(id)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -15,7 +15,7 @@
         <activity
                 android:name=".activities.MovieDetailActivity"
                 android:parentActivityName=".activities.MovieActivity">
-            >
+
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".activities.MovieActivity"/>
