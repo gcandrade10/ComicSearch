@@ -25,6 +25,7 @@ class MovieDetailActivity : AppCompatActivity() {
         val id = intent.getIntExtra("id", 0)
         moviewDetailViewModel.movieLiveData.observe(this, Observer { movie ->
             binding.movie = movie
+            supportActionBar?.title=movie.name
         })
         moviewDetailViewModel.fetchMovie(id)
     }
