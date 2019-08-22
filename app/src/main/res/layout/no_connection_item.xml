@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/noConnectionConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:minHeight="@dimen/common_60dp_dimen">
+
+    <TextView
+            android:id="@+id/noConnectionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/actionButtonsContainer"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="start"
+            android:lineSpacingMultiplier="@dimen/line_spacing_captions_content"
+            android:padding="@dimen/common_16dp_dimen"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_14sp_dimen"
+            tools:text="There is not internet connection, we are seeing cache ;)" />
+
+    <FrameLayout
+            android:id="@+id/actionButtonsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+        <ImageView
+                android:id="@+id/noConnectionCloseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_24dp_dimen"
+                android:layout_margin="@dimen/common_16dp_dimen"
+                app:srcCompat="@drawable/ic_close_white_24dp" />
+
+        <ImageView
+                android:id="@+id/noConnectionRetryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_24dp_dimen"
+                android:layout_margin="@dimen/common_16dp_dimen"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_reload_wht" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>

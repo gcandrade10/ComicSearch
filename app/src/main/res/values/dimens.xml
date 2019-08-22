@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_60dp_dimen">60dp</dimen>
+    <dimen name="common_1dp_dimen">1dp</dimen>
+    <dimen name="line_spacing_captions_content">1.43</dimen>
+    <dimen name="common_16dp_dimen">16dp</dimen>
+    <dimen name="common_14sp_dimen">14sp</dimen>
+    <dimen name="common_24dp_dimen">24dp</dimen>
+
+</resources>

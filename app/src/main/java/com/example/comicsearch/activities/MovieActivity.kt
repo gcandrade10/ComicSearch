@@ -15,17 +15,19 @@ import com.example.comicsearch.api.Movie
 import com.example.comicsearch.viewmodels.ComicVineViewModel
 import kotlinx.android.synthetic.main.activity_movie.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
+import kotlin.concurrent.schedule
+
 
 class MovieActivity : AppCompatActivity() {
-
     val comicVineViewModel: ComicVineViewModel by viewModel()
-
+    private var timer = Timer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
         comicVineViewModel.moviesLiveData.observe(this, Observer { movies ->
-            Toast.makeText(this, "Llegaron: ${movies.size}", Toast.LENGTH_LONG)
+            spinner.visibility = View.GONE
             list_recycler_view.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = ListAdapter(movies, openActivity)
@@ -49,7 +51,21 @@ class MovieActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                comicVineViewModel.search(query)
+                timer.cancel()
+                val sleep = when (query.length) {
+                    0 -> 1300L
+                    1 -> 1000L
+                    2, 3 -> 700L
+                    4, 5 -> 500L
+                    else -> 300L
+                }
+                timer = Timer()
+                timer.schedule(sleep) {
+                    runOnUiThread {
+                        spinner.visibility = View.VISIBLE
+                    }
+                    comicVineViewModel.search(query)
+                }
                 return false
             }
         })
