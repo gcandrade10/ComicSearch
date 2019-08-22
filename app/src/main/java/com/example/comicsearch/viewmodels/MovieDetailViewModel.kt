@@ -10,7 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class MoviewDetailViewModel(private val repository: MovieRepository) : ViewModel() {
+class MovieDetailViewModel(private val repository: MovieRepository) : ViewModel() {
     val movieLiveData = MutableLiveData<Movie>()
     private val parentJob = Job()
 

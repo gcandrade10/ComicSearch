@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.comicsearch.viewmodels.MoviewDetailViewModel
+import com.example.comicsearch.viewmodels.MovieDetailViewModel
 import com.example.comicsearch.databinding.ActivityMovieDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.view.MenuItem
@@ -13,7 +13,7 @@ import com.example.comicsearch.R
 
 class MovieDetailActivity : AppCompatActivity() {
 
-    private val moviewDetailViewModel: MoviewDetailViewModel by viewModel()
+    private val moviewDetailViewModel: MovieDetailViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

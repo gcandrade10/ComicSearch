@@ -2,14 +2,12 @@ package com.example.comicsearch.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.comicsearch.Apifactory.comicVineApi
 import com.example.comicsearch.api.Movie
-import com.example.comicsearch.database.MovieDatabase
 import com.example.comicsearch.repositories.MovieRepository
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class ComicVineViewModel(private val dataBase: MovieDatabase) : ViewModel() {
+class ComicVineViewModel(private val repository: MovieRepository) : ViewModel() {
 
     private val parentJob = Job()
 
@@ -18,30 +16,31 @@ class ComicVineViewModel(private val dataBase: MovieDatabase) : ViewModel() {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    private val repository: MovieRepository =
-        MovieRepository(comicVineApi, dataBase)
 
+    val moviesLiveData = MutableLiveData<List<Movie>>()
 
-    val popularMoviesLiveData = MutableLiveData<List<Movie>>()
+    init {
+        fetchMovies()
+    }
 
-    fun fetchMovies() {
+    private fun fetchMovies(search: String = "") {
         scope.launch {
-            val popularMovies = repository.getPopularMovies()
-            popularMoviesLiveData.postValue(popularMovies)
-        }
-    }
-
-
-    fun cancelAllRequests() = coroutineContext.cancel()
-    fun search(query: String) {
-        if (query.isEmpty()) {
-            fetchMovies()
-        } else {
-            scope.launch {
-                val search = repository.search(query)
-                popularMoviesLiveData.postValue(search)
+            var movies = repository.getPopularMovies()
+            if (search.isNotEmpty()) {
+                movies = repository.search(search)
             }
+            moviesLiveData.postValue(movies)
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        cancelAllRequests()
+    }
+
+    private fun cancelAllRequests() = coroutineContext.cancel()
+
+    fun search(query: String) {
+        fetchMovies(query)
+    }
 }

@@ -6,7 +6,7 @@ import com.example.comicsearch.*
 import com.example.comicsearch.api.ImageUrl
 import com.example.comicsearch.database.MovieDatabase
 import com.example.comicsearch.viewmodels.ComicVineViewModel
-import com.example.comicsearch.viewmodels.MoviewDetailViewModel
+import com.example.comicsearch.viewmodels.MovieDetailViewModel
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import org.koin.android.viewmodel.dsl.viewModel
@@ -22,7 +22,7 @@ val repositoryModule = module {
         )
     }
     viewModel { ComicVineViewModel(get()) }
-    viewModel { MoviewDetailViewModel(get()) }
+    viewModel { MovieDetailViewModel(get()) }
 }
 
 object DatabaseManager {
