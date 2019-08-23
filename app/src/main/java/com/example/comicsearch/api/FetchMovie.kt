@@ -9,7 +9,6 @@ import retrofit2.http.Query
 
 // Data Model for Movie item
 @Entity(tableName = "movie")
-
 data class Movie(
     @PrimaryKey
     val id: Int,
@@ -37,3 +36,13 @@ interface IComicVineApi {
     @GET("movies")
     fun movies(): Deferred<Response<ComicVineMovieResponse>>
 }
+
+data class Item(
+    val movie: Movie = Movie(
+        id = Int.MAX_VALUE,
+        name = "name",
+        description = "description",
+        image = ImageUrl(thumb_url = "thumb_url", medium_url = "medium_url")
+    ),
+    val spinner: Boolean = false
+)

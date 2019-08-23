@@ -3,6 +3,8 @@ package com.example.comicsearch.database
 import android.content.Context
 import androidx.room.*
 import com.example.comicsearch.api.Movie
+import com.example.comicsearch.regularMoviesNumber
+
 
 @Database(entities = [Movie::class], exportSchema = false, version = 1)
 @TypeConverters(Converters::class)
@@ -31,14 +33,14 @@ abstract class MovieDatabase : RoomDatabase() {
 
 @Dao
 interface MovieDao {
-    @Query("Select * from movie")
-    suspend fun getMoviewList(): List<Movie>
+    @Query("Select * from movie limit :limit offset :offset")
+    suspend fun getMoviewList(limit: Int = regularMoviesNumber, offset: Int): List<Movie>
 
     @Insert
     suspend fun insertMovies(movies: List<Movie>)
 
     @Query("Select * from movie where name LIKE :query")
-    suspend fun getSearchMovie(query: String?): List<Movie>?
+    suspend fun getSearchMovie(query: String?): List<Movie>
 
     @Query("Select * from movie where id =:id")
     suspend fun getMovie(id: Int): Movie

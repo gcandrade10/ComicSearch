@@ -1,6 +1,7 @@
-package com.example.comicsearch
+package com.example.comicsearch.api
 
-import com.example.comicsearch.api.IComicVineApi
+import com.example.comicsearch.comicvineApiKey
+import com.example.comicsearch.regularMoviesNumber
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,7 +16,7 @@ object Apifactory {
             .newBuilder()
             .addQueryParameter("api_key", comicvineApiKey)
             .addQueryParameter("format", "json")
-            .addQueryParameter("limit", "10")
+            .addQueryParameter("limit", "$regularMoviesNumber")
             .build()
 
         val newRequest = chain.request()

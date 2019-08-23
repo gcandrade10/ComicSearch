@@ -3,6 +3,7 @@ package com.example.comicsearch.repositories
 import android.content.Context
 import androidx.room.Room
 import com.example.comicsearch.*
+import com.example.comicsearch.api.Apifactory
 import com.example.comicsearch.api.ImageUrl
 import com.example.comicsearch.database.MovieDatabase
 import com.example.comicsearch.viewmodels.ComicVineViewModel

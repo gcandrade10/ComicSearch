@@ -2,14 +2,16 @@ package com.example.comicsearch.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.comicsearch.R
+import com.example.comicsearch.TAG
 import com.example.comicsearch.api.ListAdapter
 import com.example.comicsearch.api.Movie
 import com.example.comicsearch.viewmodels.ComicVineViewModel
@@ -19,26 +21,47 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 
-class MovieActivity : AppCompatActivity() {
-    val comicVineViewModel: ComicVineViewModel by viewModel()
+class MovieListActivity : AppCompatActivity() {
+    private var loading = true
+    val movieListViewModel: ComicVineViewModel by viewModel()
     private var timer = Timer()
-
+    lateinit var listAdapter:ListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.e(TAG, "onCreate")
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-        comicVineViewModel.moviesLiveData.observe(this, Observer { movies ->
-            spinner.visibility = View.GONE
-            list_recycler_view.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = ListAdapter(movies, openActivity)
-            }
+        listAdapter = ListAdapter(openActivity)
+        list_recycler_view.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = listAdapter
+            addOnScrollListener(scrollListener)
+        }
+        movieListViewModel.moviesLiveData.observe(this, Observer { movies ->
+            loading = listAdapter.add(movies)
+            spinner.visibility=View.GONE
         })
+    }
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = (recyclerView.layoutManager) as LinearLayoutManager
+            val totalItemCount = layoutManager.itemCount
+            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+            if (totalItemCount == (lastVisibleItem + 1) && !loading) {
+                loading = true
+                movieListViewModel.loadMore()
+            }
+        }
+
     }
 
     private val openActivity = { view: View, movie: Movie ->
         val intent = Intent(this, MovieDetailActivity::class.java)
         intent.putExtra("id", movie.id)
         startActivity(intent)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,7 +87,7 @@ class MovieActivity : AppCompatActivity() {
                     runOnUiThread {
                         spinner.visibility = View.VISIBLE
                     }
-                    comicVineViewModel.search(query)
+                    movieListViewModel.search(query)
                 }
                 return false
             }

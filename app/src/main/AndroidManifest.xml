@@ -14,13 +14,13 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".activities.MovieDetailActivity"
-                android:parentActivityName=".activities.MovieActivity">
+                android:parentActivityName=".activities.MovieListActivity">
 
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activities.MovieActivity"/>
+                    android:value=".activities.MovieListActivity"/>
         </activity>
-        <activity android:name=".activities.MovieActivity">
+        <activity android:name=".activities.MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
