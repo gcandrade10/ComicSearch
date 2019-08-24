@@ -1,30 +1,24 @@
 package com.example.comicsearch.repositories
 
+import android.util.Log
+import com.example.comicsearch.TAG
 import com.example.comicsearch.api.IComicVineApi
 import com.example.comicsearch.api.Movie
 import com.example.comicsearch.database.MovieDatabase
 
 class MovieRepository(private val api: IComicVineApi, private val dataBase: MovieDatabase) : BaseRepository() {
 
-    suspend fun getPopularMovies(offset: Int): List<Movie> {
+    suspend fun listMoviesFromRemote(offset: Int, page: Int): List<Movie> {
         try {
-            return getPopularMoviesFromRemote(offset)
+            return listMoviesFromRemote(offset)
         } catch (e: Exception) {
         }
-        return dataBase.movieDao().getMoviewList(offset = offset)
+        return dataBase.movieDao().listMoviesFromDB(offset = offset)
     }
 
-    suspend fun search(query: String, offset: Int): List<Movie> {
-        try {
-            return searchFromRemote(query)
-        } catch (e: Exception) {
-        }
-        return dataBase.movieDao().getSearchMovie("%$query%")
-    }
-
-    private suspend fun getPopularMoviesFromRemote(offset: Int): MutableList<Movie> {
+    private suspend fun listMoviesFromRemote(offset: Int): MutableList<Movie> {
         val movieResponse = safeApiCall(
-            call = { api.movies().await() },
+            call = { api.listMoviesFromRemote(offset = offset).await() },
             errorMessage = "Error Fetching Popular Movies"
         )
         val movies = movieResponse?.results!!.toMutableList()
@@ -32,10 +26,19 @@ class MovieRepository(private val api: IComicVineApi, private val dataBase: Movi
         return movies
     }
 
-    private suspend fun searchFromRemote(query: String): MutableList<Movie> {
+    suspend fun searchMovies(query: String, offset: Int, page: Int): List<Movie> {
+        try {
+            return searchMoviesFromRemote(query, page)
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+        return dataBase.movieDao().searchMovieFromDB("%$query%", offset = offset)
+    }
+
+    private suspend fun searchMoviesFromRemote(query: String, page: Int): MutableList<Movie> {
         val movieResponse = safeApiCall(
-            call = { api.search(query).await() },
-            errorMessage = "Error Fetching Popular Movies"
+            call = { api.searchMovies(query, page = page).await() },
+            errorMessage = "Error Searching"
         )
         val movies = movieResponse?.results!!.toMutableList()
         dataBase.movieDao().insertMovies(movies)

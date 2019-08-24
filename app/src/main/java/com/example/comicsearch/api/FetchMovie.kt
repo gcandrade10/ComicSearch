@@ -11,10 +11,10 @@ import retrofit2.http.Query
 @Entity(tableName = "movie")
 data class Movie(
     @PrimaryKey
-    val id: Int,
-    val name: String,
-    val description: String?,
-    val image: ImageUrl
+    val id: Int = Int.MAX_VALUE,
+    val name: String = "",
+    val description: String? = "",
+    val image: ImageUrl = ImageUrl(thumb_url = "", medium_url = "")
 )
 
 class ImageUrl(
@@ -31,18 +31,13 @@ data class ComicVineMovieResponse(
 //A retrofit Network Interface for the Api
 interface IComicVineApi {
     @GET("search")
-    fun search(@Query("query") query: String): Deferred<Response<ComicVineMovieResponse>>
+    fun searchMovies(@Query("query") query: String, @Query("page") page: Int): Deferred<Response<ComicVineMovieResponse>>
 
-    @GET("movies")
-    fun movies(): Deferred<Response<ComicVineMovieResponse>>
+    @GET("listMoviesFromRemote")
+    fun listMoviesFromRemote(@Query("offset") offset: Int): Deferred<Response<ComicVineMovieResponse>>
 }
 
 data class Item(
-    val movie: Movie = Movie(
-        id = Int.MAX_VALUE,
-        name = "name",
-        description = "description",
-        image = ImageUrl(thumb_url = "thumb_url", medium_url = "medium_url")
-    ),
+    val movie: Movie = Movie(),
     val spinner: Boolean = false
 )

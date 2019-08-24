@@ -8,16 +8,20 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comicsearch.R
+import com.example.comicsearch.regularMoviesNumber
 import com.squareup.picasso.Picasso
 
 
-class ListAdapter(private val onClickListener: (View, Movie) -> Unit) : RecyclerView.Adapter<MovieViewHolder>() {
+class ListAdapter(private val movies: List<Movie>, private val onClickListener: (View, Movie) -> Unit) :
+    RecyclerView.Adapter<MovieViewHolder>() {
     private val spinner = Item(spinner = true)
-    private var posSpinner = 0
-    private var mList = mutableListOf<Item>(spinner)
+    private var posSpinner: Int = 0
+    private var mList: MutableList<Item>
 
     init {
         setHasStableIds(true)
+        mList = movies.map { Item(movie = it) }.toMutableList()
+        addSpiner()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -44,32 +48,32 @@ class ListAdapter(private val onClickListener: (View, Movie) -> Unit) : Recycler
         return position
     }
 
-    fun add(movies: List<Movie>):Boolean {
-        removeSprinner()
+    fun add(movies: List<Movie>) {
+        removeSpinner()
         movies.forEachIndexed { index, movie ->
             mList.add(posSpinner + index, Item(movie = movie))
         }
         if (movies.isNotEmpty()) {
             addSpiner()
             notifyDataSetChanged()
-            return true
         }
         notifyDataSetChanged()
-        return false
     }
 
-    //
-    fun addSpiner() {
-        posSpinner = mList.size
-        mList.add(posSpinner, spinner)
+    private fun addSpiner() {
+        if (mList.size >= regularMoviesNumber) {
+            posSpinner = mList.size
+            mList.add(posSpinner, spinner)
+        }
     }
 
-    fun removeSprinner() {
-        mList.removeAt(posSpinner)
-        notifyItemRemoved(posSpinner)
+    private fun removeSpinner() {
+        if (mList.size > posSpinner && mList[posSpinner] == spinner) {
+            mList.removeAt(posSpinner)
+            notifyItemRemoved(posSpinner)
+        }
     }
 }
-
 
 class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.item_movie, parent, false)) {

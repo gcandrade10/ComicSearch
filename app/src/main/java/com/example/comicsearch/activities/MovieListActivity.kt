@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,24 +23,31 @@ import kotlin.concurrent.schedule
 
 
 class MovieListActivity : AppCompatActivity() {
-    private var loading = true
+    private var loading = false
     val movieListViewModel: ComicVineViewModel by viewModel()
     private var timer = Timer()
-    lateinit var listAdapter:ListAdapter
+    lateinit var listAdapter: ListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e(TAG, "onCreate")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-        listAdapter = ListAdapter(openActivity)
-        list_recycler_view.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = listAdapter
-            addOnScrollListener(scrollListener)
-        }
-        movieListViewModel.moviesLiveData.observe(this, Observer { movies ->
-            loading = listAdapter.add(movies)
-            spinner.visibility=View.GONE
+        movieListViewModel.movieListLiveData.observe(this, Observer { movieListLiveData ->
+            if (spinner.isVisible) {
+                spinner.visibility = View.GONE
+            }
+            if (movieListLiveData.replaceMovies) {
+                listAdapter = ListAdapter(movieListLiveData.movies, openActivity)
+                list_recycler_view.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = listAdapter
+                    addOnScrollListener(scrollListener)
+                }
+            } else {
+                listAdapter.add(movieListLiveData.movies)
+            }
+            loading=movieListLiveData.movies.isEmpty()
+
         })
     }
 
@@ -87,7 +95,7 @@ class MovieListActivity : AppCompatActivity() {
                     runOnUiThread {
                         spinner.visibility = View.VISIBLE
                     }
-                    movieListViewModel.search(query)
+                    movieListViewModel.searchMovies(query)
                 }
                 return false
             }

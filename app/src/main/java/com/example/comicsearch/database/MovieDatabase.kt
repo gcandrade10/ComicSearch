@@ -34,13 +34,13 @@ abstract class MovieDatabase : RoomDatabase() {
 @Dao
 interface MovieDao {
     @Query("Select * from movie limit :limit offset :offset")
-    suspend fun getMoviewList(limit: Int = regularMoviesNumber, offset: Int): List<Movie>
+    suspend fun listMoviesFromDB(limit: Int = regularMoviesNumber, offset: Int): List<Movie>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovies(movies: List<Movie>)
 
-    @Query("Select * from movie where name LIKE :query")
-    suspend fun getSearchMovie(query: String?): List<Movie>
+    @Query("Select * from movie where name LIKE :query limit :limit offset :offset")
+    suspend fun searchMovieFromDB(query: String, limit: Int = regularMoviesNumber, offset: Int): List<Movie>
 
     @Query("Select * from movie where id =:id")
     suspend fun getMovie(id: Int): Movie
