@@ -6,8 +6,8 @@ import com.squareup.moshi.JsonAdapter
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class Converters() : KoinComponent {
-    val adapter by inject<JsonAdapter<ImageUrl>>()
+class Converters : KoinComponent {
+    private val adapter by inject<JsonAdapter<ImageUrl>>()
     @TypeConverter
     fun fromString(value: String): ImageUrl? {
 
@@ -15,7 +15,7 @@ class Converters() : KoinComponent {
     }
 
     @TypeConverter
-    fun ImageUrlString(value: ImageUrl): String {
+    fun imageUrlString(value: ImageUrl): String {
         return adapter.toJson(value)
     }
 }

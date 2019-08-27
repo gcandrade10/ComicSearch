@@ -1,4 +1,4 @@
-package com.example.comicsearch.activities
+package com.example.comicsearch.ui
 
 import com.example.comicsearch.api.Movie
 

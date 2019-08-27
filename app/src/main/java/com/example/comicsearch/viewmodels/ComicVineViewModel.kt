@@ -2,10 +2,10 @@ package com.example.comicsearch.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.comicsearch.activities.ActionType
-import com.example.comicsearch.activities.MovieListViewData
 import com.example.comicsearch.api.Movie
 import com.example.comicsearch.repositories.MovieRepository
+import com.example.comicsearch.ui.ActionType
+import com.example.comicsearch.ui.MovieListViewData
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 

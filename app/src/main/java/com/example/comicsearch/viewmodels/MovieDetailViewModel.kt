@@ -25,5 +25,4 @@ class MovieDetailViewModel(private val repository: MovieRepository) : ViewModel(
             movieLiveData.postValue(popularMovies)
         }
     }
-
 }

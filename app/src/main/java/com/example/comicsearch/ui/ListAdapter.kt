@@ -1,18 +1,14 @@
-package com.example.comicsearch.api
+package com.example.comicsearch.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.comicsearch.R
+import com.example.comicsearch.api.Movie
 import com.example.comicsearch.regularMoviesNumber
-import com.squareup.picasso.Picasso
 
 
-class ListAdapter(private val movies: List<Movie>, private val onClickListener: (View, Movie) -> Unit) :
+class ListAdapter(movies: List<Movie>, private val onClickListener: (View, Movie) -> Unit) :
     RecyclerView.Adapter<MovieViewHolder>() {
     private val spinner = Item(spinner = true)
     private var posSpinner: Int = 0
@@ -21,7 +17,7 @@ class ListAdapter(private val movies: List<Movie>, private val onClickListener: 
     init {
         setHasStableIds(true)
         mList = movies.map { Item(movie = it) }.toMutableList()
-        addSpiner()
+        addSpinner()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -54,13 +50,13 @@ class ListAdapter(private val movies: List<Movie>, private val onClickListener: 
             mList.add(posSpinner + index, Item(movie = movie))
         }
         if (movies.isNotEmpty()) {
-            addSpiner()
+            addSpinner()
             notifyDataSetChanged()
         }
         notifyDataSetChanged()
     }
 
-    private fun addSpiner() {
+    private fun addSpinner() {
         if (mList.size >= regularMoviesNumber) {
             posSpinner = mList.size
             mList.add(posSpinner, spinner)
@@ -75,30 +71,3 @@ class ListAdapter(private val movies: List<Movie>, private val onClickListener: 
     }
 }
 
-class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-    RecyclerView.ViewHolder(inflater.inflate(R.layout.item_movie, parent, false)) {
-    private var mTitleView: TextView? = null
-    private var mImageView: ImageView? = null
-    private var mSpinner: ProgressBar? = null
-
-
-    init {
-        mTitleView = itemView.findViewById(R.id.textViewName)
-        mImageView = itemView.findViewById(R.id.imageView)
-        mSpinner = itemView.findViewById(R.id.progressBar)
-
-    }
-
-    fun bind(item: Item) {
-        if (item.spinner) {
-            mTitleView?.visibility = View.GONE
-            mImageView?.visibility = View.GONE
-            mSpinner?.visibility = View.VISIBLE
-        } else {
-            mTitleView?.text = item.movie.name
-            Picasso.get().load(item.movie.image.thumb_url).into(mImageView)
-        }
-
-    }
-
-}

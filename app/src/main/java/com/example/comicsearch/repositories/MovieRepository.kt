@@ -12,13 +12,14 @@ class MovieRepository(private val api: IComicVineApi, private val dataBase: Movi
         try {
             return listMoviesFromRemote(offset)
         } catch (e: Exception) {
+            Log.e(TAG, e.toString())
         }
         return dataBase.movieDao().listMoviesFromDB(offset = offset)
     }
 
     private suspend fun listMoviesFromRemote(offset: Int): MutableList<Movie> {
         val movieResponse = safeApiCall(
-            call = { api.listMoviesFromRemote(offset = offset).await() },
+            call = { api.listMoviesFromRemoteAsync(offset = offset).await() },
             errorMessage = "Error Fetching Popular Movies"
         )
         val movies = movieResponse?.results!!.toMutableList()
@@ -37,7 +38,7 @@ class MovieRepository(private val api: IComicVineApi, private val dataBase: Movi
 
     private suspend fun searchMoviesFromRemote(query: String, page: Int): MutableList<Movie> {
         val movieResponse = safeApiCall(
-            call = { api.searchMovies(query, page = page).await() },
+            call = { api.searchMoviesAsync(query, page = page).await() },
             errorMessage = "Error Searching"
         )
         val movies = movieResponse?.results!!.toMutableList()

@@ -8,9 +8,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-object Apifactory {
-
-    //Creating Auth Interceptor to add api_key query in front of all the requests.
+object ApiFactory {
     private val authInterceptor = Interceptor { chain ->
         val newUrl = chain.request().url()
             .newBuilder()
@@ -27,12 +25,11 @@ object Apifactory {
         chain.proceed(newRequest)
     }
 
-    //OkhttpClient for building http request url
     private val comicvineClient = OkHttpClient().newBuilder()
         .addInterceptor(authInterceptor)
         .build()
 
-    fun retrofit(): Retrofit = Retrofit.Builder()
+    private fun retrofit(): Retrofit = Retrofit.Builder()
         .client(comicvineClient)
         .baseUrl("https://comicvine.gamespot.com/api/")
         .addConverterFactory(MoshiConverterFactory.create())

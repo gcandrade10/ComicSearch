@@ -1,20 +1,18 @@
-package com.example.comicsearch.activities
+package com.example.comicsearch.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.comicsearch.viewmodels.MovieDetailViewModel
-import com.example.comicsearch.databinding.ActivityMovieDetailBinding
-import org.koin.android.viewmodel.ext.android.viewModel
-import android.view.MenuItem
 import com.example.comicsearch.R
+import com.example.comicsearch.databinding.ActivityMovieDetailBinding
+import com.example.comicsearch.viewmodels.MovieDetailViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class MovieDetailActivity : AppCompatActivity() {
-
-    private val moviewDetailViewModel: MovieDetailViewModel by viewModel()
-
+    private val movieDetailViewModel: MovieDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +21,11 @@ class MovieDetailActivity : AppCompatActivity() {
             R.layout.activity_movie_detail
         )
         val id = intent.getIntExtra("id", 0)
-        moviewDetailViewModel.movieLiveData.observe(this, Observer { movie ->
+        movieDetailViewModel.movieLiveData.observe(this, Observer { movie ->
             binding.movie = movie
-            supportActionBar?.title=movie.name
+            supportActionBar?.title = movie.name
         })
-        moviewDetailViewModel.fetchMovie(id)
+        movieDetailViewModel.fetchMovie(id)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

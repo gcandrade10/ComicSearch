@@ -20,7 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".activities.MovieDetailActivity">
+                tools:context=".ui.MovieDetailActivity">
 
             <ImageView
                     android:layout_width="0dp"

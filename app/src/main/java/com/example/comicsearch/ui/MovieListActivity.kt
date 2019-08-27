@@ -1,8 +1,7 @@
-package com.example.comicsearch.activities
+package com.example.comicsearch.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comicsearch.R
-import com.example.comicsearch.TAG
-import com.example.comicsearch.api.ListAdapter
 import com.example.comicsearch.api.Movie
 import com.example.comicsearch.viewmodels.ComicVineViewModel
 import kotlinx.android.synthetic.main.activity_movie.*
@@ -24,12 +21,11 @@ import kotlin.concurrent.schedule
 
 class MovieListActivity : AppCompatActivity() {
     private var loading = false
-    val movieListViewModel: ComicVineViewModel by viewModel()
+    private val movieListViewModel: ComicVineViewModel by viewModel()
     private var timer = Timer()
-    lateinit var listAdapter: ListAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.e(TAG, "onCreate")
+    private lateinit var listAdapter: ListAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
         movieListViewModel.movieListLiveData.observe(this, Observer { movieListLiveData ->
@@ -46,8 +42,7 @@ class MovieListActivity : AppCompatActivity() {
             } else {
                 listAdapter.add(movieListLiveData.movies)
             }
-            loading=movieListLiveData.movies.isEmpty()
-
+            loading = movieListLiveData.movies.isEmpty()
         })
     }
 
@@ -62,14 +57,12 @@ class MovieListActivity : AppCompatActivity() {
                 movieListViewModel.loadMore()
             }
         }
-
     }
 
-    private val openActivity = { view: View, movie: Movie ->
+    private val openActivity = { _: View, movie: Movie ->
         val intent = Intent(this, MovieDetailActivity::class.java)
         intent.putExtra("id", movie.id)
         startActivity(intent)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,7 +71,7 @@ class MovieListActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchView.clearFocus()
-                return true // Don't close
+                return true
             }
 
             override fun onQueryTextChange(query: String): Boolean {

@@ -25,7 +25,5 @@ fun TextView.setText(movie: Movie?) {
             this.text = (Html.fromHtml(movie.description))
         }
         this.movementMethod = LinkMovementMethod.getInstance()
-
     }
-
 }
